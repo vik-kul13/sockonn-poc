@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin, booking calendar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1000px; box-sizing: border-box; display: flex; flex-wrap: wrap; background: #F4F5FA; font-family: 'Public Sans', system-ui, sans-serif; color: #151A3C">
+  <div style="flex: 0 0 220px; box-sizing: border-box; background: #141B4D; padding: 28px 16px; display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+      <div style="width: 28px; height: 28px; border-radius: 8px; background: #F0B54A"></div>
+      <div style="display: flex; flex-direction: column; gap: 1px">
+        <div style="font-weight: 700; font-size: 15px; color: #FFFFFF">Society Konnect</div>
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #C3C9F0">Admin</div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 500">
+      <a href="AdminRequests.dc.html" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Requests</a>
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Societies</a>
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Agencies</a>
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; background: #2B3590; color: #FFFFFF; font-weight: 600">Calendar</a>
+    </div>
+  </div>
+  <div style="flex: 1 1 760px; min-width: 0; box-sizing: border-box; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">Booking calendar</h1>
+        <div style="font-size: 14px; color: #4A5080">{{scopeText}}</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-label="Previous month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">‹</button>
+        <div style="min-width: 130px; text-align: center; font-size: 16px; font-weight: 700; color: #141B4D">October 2026</div>
+        <button type="button" aria-label="Next month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">›</button>
+      </div>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end">
+      <div style="flex: 1 1 260px; max-width: 340px; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+        <label for="soc" style="font-size: 13px; font-weight: 600; color: #333A6B">Society</label>
+        <select id="soc" value="{{society}}" onChange="{{onSociety}}" style="height: 48px; box-sizing: border-box; padding: 0 12px; border: 1.5px solid #141B4D; border-radius: 10px; font-size: 15px; font-weight: 600; color: #141B4D; background: #FFFFFF">
+          <sc-for list="{{societyOptions}}" as="o" hint-placeholder-count="6">
+            <option value="{{o.value}}">{{o.label}}</option>
+          </sc-for>
+        </select>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+          <button type="button" onClick="{{f.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}">{{f.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap">
+      <div style="flex: 1 1 220px; display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px">
+        <div style="width: 10px; align-self: stretch; border-radius: 5px; background: #0A6B3F"></div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 13px; color: #4A5080">Confirmed</div>
+          <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{confirmedCount}} bookings · {{confirmedValue}}</div>
+        </div>
+      </div>
+      <div style="flex: 1 1 220px; display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px">
+        <div style="width: 10px; align-self: stretch; border-radius: 5px; background: #F0B54A"></div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 13px; color: #4A5080">Awaiting payment</div>
+          <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{awaitingCount}} bookings · {{awaitingValue}}</div>
+        </div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 16px; overflow-x: auto">
+      <div style="min-width: 920px">
+        <div style="display: grid; grid-template-columns: 220px repeat(31, minmax(0, 1fr)); align-items: stretch; background: #E8EAF6; border-bottom: 1px solid #DDE0F0">
+          <div style="grid-column: 1; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #4A5080">Space</div>
+          <sc-for list="{{days}}" as="d" hint-placeholder-count="31">
+            <div style="grid-column: {{d.col}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 6px 0; background: {{d.bg}}">
+              <span style="font-size: 10px; font-weight: 600; color: #4A5080">{{d.dow}}</span>
+              <span style="font-size: 12px; font-weight: {{d.weight}}; color: #141B4D">{{d.num}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-for list="{{gantt}}" as="row" hint-placeholder-count="6">
+          <div style="display: contents">
+            <sc-if value="{{row.isHeader}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 40px; padding: 0 16px; background: #F0F2FA; border-bottom: 1px solid #E7E9F4">
+                <div style="font-size: 13px; font-weight: 700; color: #141B4D">{{row.title}}</div>
+                <div style="font-size: 12px; color: #4A5080">{{row.meta}}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{row.isSpace}}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: 220px repeat(31, minmax(0, 1fr)); align-items: center; height: 56px; border-bottom: 1px solid #E7E9F4">
+                <div style="grid-column: 1; grid-row: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+                  <div style="font-size: 14px; font-weight: 700; color: #141B4D">{{row.space}}</div>
+                  <div style="font-size: 12px; color: #4A5080">{{row.society}}</div>
+                </div>
+                <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="31">
+                  <div style="grid-column: {{cell.col}}; grid-row: 1; align-self: stretch; background: {{cell.bg}}; border-left: 1px solid #EEF0F8"></div>
+                </sc-for>
+                <sc-for list="{{row.bars}}" as="b" hint-placeholder-count="1">
+                  <div title="{{b.title}}" style="grid-column: {{b.col}}; grid-row: 1; z-index: 2; height: 34px; margin: 0 2px; box-sizing: border-box; border-radius: 8px; padding: 0 8px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; font-size: 12px; font-weight: 700; background: {{b.bg}}; color: {{b.fg}}; border: {{b.border}}">{{b.text}}</div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: #4A5080">
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #0A6B3F"></span>Confirmed and paid</div>
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; box-sizing: border-box; background: #FFF4DE; border: 1.5px dashed #C98A00"></span>Awaiting payment (dates not blocked until paid)</div>
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #FFF3D6; border: 1px solid #F0B54A"></span>Today</div>
+    </div>
+    <div style="font-size: 17px; font-weight: 700; color: #141B4D; margin-top: 4px">{{listTitle}}</div>
+    <div style="background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 16px; overflow-x: auto">
+      <div style="min-width: 760px">
+        <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 1.5fr 1.1fr 1fr 1.4fr; align-items: center; height: 44px; padding: 0 20px; background: #E8EAF6; color: #4A5080; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em">
+          <div>Space</div><div>Society</div><div>Dates</div><div>Agency</div><div>Amount</div><div>Status</div>
+        </div>
+        <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 28px 20px; text-align: center; font-size: 14px; color: #4A5080; border-top: 1px solid #E7E9F4">No bookings match these filters.</div>
+        </sc-if>
+        <sc-for list="{{list}}" as="r" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 1.7fr 1.1fr 1.5fr 1.1fr 1fr 1.4fr; align-items: center; min-height: 56px; padding: 0 20px; border-top: 1px solid #E7E9F4; font-size: 14px">
+            <div style="font-weight: 600">{{r.space}}</div>
+            <div>{{r.society}}</div>
+            <div>{{r.dates}}</div>
+            <div>{{r.agency}}</div>
+            <div style="font-weight: 600">{{r.amount}}</div>
+            <div><span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}">{{r.pillText}}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1000}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { filter: 'all', society: 'all' };
+}
+renderVals() {
+const filter = this.state.filter;
+const society = this.state.society;
+const today = 16;
+const dowNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const inr = (n) => '₹' + n.toLocaleString('en-IN');
+const dayInfo = [];
+for (let d = 1; d <= 31; d++) {
+const w = new Date(2026, 9, d).getDay();
+dayInfo.push({ d: d, weekend: w === 0 || w === 6 });
+}
+const days = dayInfo.map((x) => ({
+col: x.d + 1,
+num: String(x.d),
+dow: dowNames[new Date(2026, 9, x.d).getDay()],
+weight: x.d === today ? '700' : '500',
+bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#DEE1F2' : 'transparent')
+}));
+const cells = dayInfo.map((x) => ({
+col: x.d + 1,
+bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#F7F8FC' : 'transparent')
+}));
+const allBookings = [
+{ space: 'Stall / Kiosk', society: 'Society 1', s: 10, e: 11, label: 'Sat 10 – Sun 11 Oct', agency: 'Agency G', rate: 5000, status: 'confirmed' },
+{ space: 'Stall / Kiosk', society: 'Society 1', s: 17, e: 18, label: 'Sat 17 – Sun 18 Oct', agency: 'Agency H', rate: 5000, status: 'confirmed' },
+{ space: 'Stall / Kiosk', society: 'Society 1', s: 31, e: 31, label: 'Sat 31 Oct', agency: 'Agency I', rate: 5000, status: 'confirmed' },
+{ space: 'Open ground', society: 'Society 1', s: 20, e: 22, label: 'Tue 20 – Thu 22 Oct', agency: 'Agency J', rate: 15000, status: 'confirmed' },
+{ space: 'Open ground', society: 'Society 1', s: 24, e: 25, label: 'Sat 24 – Sun 25 Oct', agency: 'Agency A', rate: 15000, status: 'confirmed' },
+{ space: 'Stall / Kiosk', society: 'Society 3', s: 24, e: 24, label: 'Sat 24 Oct', agency: 'Agency M', rate: 5000, status: 'confirmed' },
+{ space: 'Stall / Kiosk', society: 'Society 3', s: 25, e: 26, label: 'Sun 25 – Mon 26 Oct', agency: 'Agency A', rate: 5000, status: 'awaiting' },
+{ space: 'Gate banner', society: 'Society 4', s: 26, e: 31, label: 'Mon 26 Oct – Sun 1 Nov', agency: 'Agency C', rate: 2000, status: 'awaiting', daysOverride: 7 },
+{ space: 'WhatsApp post', society: 'Society 2', s: 23, e: 23, label: 'Fri 23 Oct', agency: 'Agency D', rate: 1500, status: 'confirmed' }
+].map((b) => ({ ...b, amount: (b.daysOverride || (b.e - b.s + 1)) * b.rate }));
+const meta = {
+confirmed: { text: 'Confirmed', pillBg: '#DDF4EA', pillFg: '#0A6B3F', barBg: '#0A6B3F', barFg: '#FFFFFF', barBorder: '1.5px solid #0A6B3F' },
+awaiting: { text: 'Awaiting payment', pillBg: '#FFE9C7', pillFg: '#7A4300', barBg: '#FFF4DE', barFg: '#7A4300', barBorder: '1.5px dashed #C98A00' }
+};
+const societies = [
+{ name: 'Society 1', spaces: [{ type: 'Stall / Kiosk', units: 1 }, { type: 'Open ground', units: 1 }] },
+{ name: 'Society 2', spaces: [{ type: 'WhatsApp post', units: 1 }] },
+{ name: 'Society 3', spaces: [{ type: 'Stall / Kiosk', units: 2 }] },
+{ name: 'Society 4', spaces: [{ type: 'Gate banner', units: 1 }] },
+{ name: 'Society 5', spaces: [{ type: 'Lift poster', units: 1 }] }
+];
+const inSociety = (b) => society === 'all' || b.society === society;
+const scoped = allBookings.filter(inSociety);
+const keep = (b) => filter === 'all' || b.status === filter;
+const gantt = [];
+societies.filter((s) => society === 'all' || s.name === society).forEach((s) => {
+const mine = allBookings.filter((b) => b.society === s.name);
+const wait = mine.filter((b) => b.status === 'awaiting').length;
+const conf = mine.filter((b) => b.status === 'confirmed').length;
+gantt.push({ isHeader: true, isSpace: false, title: s.name, meta: conf + ' confirmed · ' + wait + ' awaiting payment', space: '', society: '', cells: [], bars: [] });
+s.spaces.forEach((sp) => {
+const ofType = mine.filter((b) => b.space === sp.type).slice().sort((a, b) => a.s - b.s);
+const laneEnds = [];
+const laneOf = {};
+ofType.forEach((b) => {
+let i = laneEnds.findIndex((end) => end < b.s);
+if (i === -1) { i = laneEnds.length; laneEnds.push(b.e); } else { laneEnds[i] = b.e; }
+laneOf[b.s + '-' + b.agency] = i;
+});
+const laneCount = Math.max(sp.units, laneEnds.length);
+const ords = ['', '2nd unit', '3rd unit', '4th unit'];
+for (let i = 0; i < laneCount; i++) {
+gantt.push({
+isHeader: false, isSpace: true, title: '', meta: '',
+space: sp.type,
+society: i === 0 ? s.name + (laneCount > 1 ? ' · ' + laneCount + ' units' : '') : s.name + ' · ' + (ords[i] || ((i + 1) + 'th unit')),
+cells: cells,
+bars: ofType.filter((b) => laneOf[b.s + '-' + b.agency] === i && keep(b)).map((b) => {
+const m = meta[b.status];
+const span = b.e - b.s + 1;
+return {
+col: (b.s + 1) + ' / ' + (b.e + 2),
+bg: m.barBg,
+fg: m.barFg,
+border: m.barBorder,
+text: span >= 3 ? b.agency : '',
+title: b.agency + ', ' + b.label + ', ' + m.text
+};
+})
+});
+}
+});
+});
+const conf = scoped.filter((b) => b.status === 'confirmed');
+const wait = scoped.filter((b) => b.status === 'awaiting');
+const sum = (arr) => arr.reduce((t, b) => t + b.amount, 0);
+const filterDefs = [
+{ key: 'all', label: 'All (' + scoped.length + ')' },
+{ key: 'confirmed', label: 'Confirmed (' + conf.length + ')' },
+{ key: 'awaiting', label: 'Awaiting payment (' + wait.length + ')' }
+];
+const list = scoped.filter(keep).slice().sort((a, b) => a.s - b.s).map((b) => {
+const m = meta[b.status];
+return { space: b.space, society: b.society, dates: b.label, agency: b.agency, amount: inr(b.amount), pillBg: m.pillBg, pillFg: m.pillFg, pillText: m.text };
+});
+const titles = { all: 'All bookings this month', confirmed: 'Confirmed bookings this month', awaiting: 'Bookings awaiting payment' };
+return {
+society: society,
+societyOptions: [{ value: 'all', label: 'All societies (' + societies.length + ')' }].concat(societies.map((s) => ({ value: s.name, label: s.name }))),
+onSociety: (e) => this.setState({ society: e.target.value }),
+scopeText: society === 'all' ? 'Paid bookings block dates for agencies across all ' + societies.length + ' societies. Pick a society to focus.' : 'Paid bookings block dates for agencies at ' + society + '.',
+days: days,
+gantt: gantt,
+filters: filterDefs.map((f) => ({
+label: f.label,
+bg: f.key === filter ? '#141B4D' : '#FFFFFF',
+fg: f.key === filter ? '#FFFFFF' : '#333A6B',
+border: f.key === filter ? '#141B4D' : '#CBD0E8',
+pick: () => this.setState({ filter: f.key })
+})),
+confirmedCount: conf.length,
+confirmedValue: inr(sum(conf)),
+awaitingCount: wait.length,
+awaitingValue: inr(sum(wait)),
+listTitle: titles[filter] + (society === 'all' ? '' : ' · ' + society),
+list: list,
+listEmpty: list.length === 0
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agency, my requests</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 900px; box-sizing: border-box; background: #F4F5FA; font-family: 'Public Sans', system-ui, sans-serif; color: #151A3C">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-sizing: border-box; min-height: 68px; padding: 10px 40px; background: #141B4D">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <div style="width: 28px; height: 28px; border-radius: 8px; background: #F0B54A"></div>
+      <div style="font-weight: 700; font-size: 16px; color: #FFFFFF">Society Konnect</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; flex-wrap: wrap">
+      <a href="Browse.dc.html" style="padding: 10px 16px; border-radius: 8px; color: #C3C9F0">Browse</a>
+      <a href="#" style="padding: 10px 16px; border-radius: 8px; background: #2B3590; color: #FFFFFF">My requests</a>
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: #F0B54A; color: #141B4D; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: 8px">A</div>
+    </div>
+  </div>
+  <div style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 28px 40px 56px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">My requests</h1>
+      <div style="font-size: 14px; color: #4A5080">Track every booking request you have sent.</div>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <button type="button" onClick="{{t.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{list}}" as="r" hint-placeholder-count="4">
+          <button type="button" onClick="{{r.pick}}" style="text-align: left; font-family: inherit; color: inherit; box-sizing: border-box; width: 100%; min-height: 88px; padding: 14px 18px; border-radius: 14px; background: #FFFFFF; border: 2px solid {{r.border}}; display: flex; flex-direction: column; gap: 6px; cursor: pointer">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+              <span style="font-size: 16px; font-weight: 700; color: #141B4D">{{r.space}}</span>
+              <span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}; white-space: nowrap">{{r.pillText}}</span>
+            </div>
+            <div style="font-size: 13px; color: #4A5080">{{r.society}}</div>
+            <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span>{{r.dates}}</span><span style="font-weight: 700">{{r.total}}</span></div>
+          </button>
+        </sc-for>
+        <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 28px; text-align: center; font-size: 14px; color: #4A5080; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px">No requests here yet.</div>
+        </sc-if>
+      </div>
+      <div style="flex: 1.2 1 420px; min-width: 0; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+          <div style="display: flex; flex-direction: column; gap: 3px">
+            <div style="font-size: 20px; font-weight: 700; color: #141B4D">{{sel.space}}</div>
+            <div style="font-size: 13px; color: #4A5080">{{sel.society}} · Request #{{sel.id}}</div>
+          </div>
+          <span style="padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: {{sel.pillBg}}; color: {{sel.pillFg}}">{{sel.pillText}}</span>
+        </div>
+        <div style="background: {{sel.noteBg}}; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
+          <div style="font-size: 15px; font-weight: 700; color: {{sel.noteFg}}">{{sel.noteTitle}}</div>
+          <div style="font-size: 14px; line-height: 1.5; color: #333A6B">{{sel.noteBody}}</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Dates</span><span style="font-weight: 600; text-align: right">{{sel.dates}}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Days</span><span style="font-weight: 600">{{sel.days}}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Rate</span><span style="font-weight: 600">{{sel.rate}}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">What you will do</span><span style="font-weight: 600; text-align: right">{{sel.purpose}}</span></div>
+          <div style="height: 1px; background: #E7E9F4"></div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-weight: 600">Total</span><span style="font-size: 22px; font-weight: 700; color: #141B4D">{{sel.total}}</span></div>
+        </div>
+        <div style="height: 1px; background: #E7E9F4"></div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4A5080">Progress</div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{sel.steps}}" as="s" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: {{s.dotBg}}; border: 2px solid {{s.dotBorder}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 700">{{s.mark}}</div>
+              <div style="display: flex; flex-direction: column; gap: 1px">
+                <div style="font-size: 14px; font-weight: {{s.weight}}; color: {{s.color}}">{{s.label}}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { tab: 'all', sel: '1036' };
+}
+renderVals() {
+const tab = this.state.tab;
+const sel = this.state.sel;
+const meta = {
+new: { text: 'New', pillBg: '#DCE1F7', pillFg: '#1F2A8A', noteBg: '#EEF0FB', noteFg: '#1F2A8A', title: 'Request received', body: 'We are checking availability with the society. You will hear from us soon. Your dates are not held yet.' },
+awaiting: { text: 'Awaiting payment', pillBg: '#FFE9C7', pillFg: '#7A4300', noteBg: '#FFF4DE', noteFg: '#7A4300', title: 'Payment needed to secure your dates', body: 'Society Konnect has shared payment details with you. Dates are secured once your payment is received. If another agency pays first, you are refunded in full.' },
+confirmed: { text: 'Confirmed', pillBg: '#DDF4EA', pillFg: '#0A6B3F', noteBg: '#E9F8F0', noteFg: '#0A5C36', title: 'Confirmed and paid', body: 'Payment received. The society has been informed that you are coming on these dates.' },
+declined: { text: 'Declined', pillBg: '#E8EAF6', pillFg: '#4A5080', noteBg: '#F4F5FA', noteFg: '#333A6B', title: 'Not available', body: 'This request could not be accepted. You can browse other dates or spaces.' }
+};
+const all = [
+{ id: '1041', space: 'Stall / Kiosk', society: 'Society 1 · Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Product sampling for two days', status: 'new', reached: 1 },
+{ id: '1036', space: 'Stall / Kiosk', society: 'Society 3 · Marathahalli · 560037', dates: 'Sun 25 – Mon 26 Oct', days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Brand activation', status: 'awaiting', reached: 3 },
+{ id: '1031', space: 'Open ground', society: 'Society 1 · Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹15,000 / day', total: 15000 * 2, purpose: 'Test drive event', status: 'confirmed', reached: 4 },
+{ id: '1029', space: 'Gate banner', society: 'Society 4 · Whitefield · 560066', dates: 'Mon 5 – Sun 11 Oct', days: 7, rate: '₹2,000 / day', total: 2000 * 7, purpose: 'Store launch banner', status: 'declined', reached: 2 }
+];
+const inr = (n) => '₹' + n.toLocaleString('en-IN');
+const count = (k) => all.filter((r) => r.status === k).length;
+const tabDefs = [
+{ key: 'all', label: 'All (' + all.length + ')' },
+{ key: 'new', label: 'New (' + count('new') + ')' },
+{ key: 'awaiting', label: 'Awaiting payment (' + count('awaiting') + ')' },
+{ key: 'confirmed', label: 'Confirmed (' + count('confirmed') + ')' },
+{ key: 'declined', label: 'Declined (' + count('declined') + ')' }
+];
+const rows = all.filter((r) => tab === 'all' || r.status === tab);
+const cur = all.find((r) => r.id === sel) || all[0];
+const m = meta[cur.status];
+const stepNames = ['Request sent', 'Reviewed by Society Konnect', 'Payment details shared', 'Confirmed and paid'];
+const steps = stepNames.map((label, i) => {
+const n = i + 1;
+let done = n <= cur.reached;
+let declinedHere = cur.status === 'declined' && n === 2;
+let lbl = declinedHere ? 'Reviewed: declined' : label;
+if (cur.status === 'declined' && n > 2) { done = false; }
+return {
+label: lbl,
+mark: declinedHere ? '×' : (done ? '✓' : ''),
+dotBg: declinedHere ? '#8A2A10' : (done ? '#141B4D' : '#FFFFFF'),
+dotBorder: declinedHere ? '#8A2A10' : (done ? '#141B4D' : '#CBD0E8'),
+weight: done ? '700' : '500',
+color: done ? '#141B4D' : '#7C82A8'
+};
+});
+return {
+tabs: tabDefs.map((t) => ({
+label: t.label,
+bg: t.key === tab ? '#141B4D' : '#FFFFFF',
+fg: t.key === tab ? '#FFFFFF' : '#333A6B',
+border: t.key === tab ? '#141B4D' : '#CBD0E8',
+pick: () => this.setState({ tab: t.key })
+})),
+list: rows.map((r) => ({
+space: r.space, society: r.society, dates: r.dates, total: inr(r.total),
+pillBg: meta[r.status].pillBg, pillFg: meta[r.status].pillFg, pillText: meta[r.status].text,
+border: r.id === cur.id ? '#141B4D' : '#DDE0F0',
+pick: () => this.setState({ sel: r.id })
+})),
+listEmpty: rows.length === 0,
+sel: {
+id: cur.id, space: cur.space, society: cur.society, dates: cur.dates, days: String(cur.days), rate: cur.rate,
+purpose: cur.purpose, total: inr(cur.total),
+pillBg: m.pillBg, pillFg: m.pillFg, pillText: m.text,
+noteBg: m.noteBg, noteFg: m.noteFg, noteTitle: m.title, noteBody: m.body,
+steps: steps
+}
+};
+}
+}
+</script>
+</body>
+</html>

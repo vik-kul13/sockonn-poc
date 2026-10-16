@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Estate Manager, my society</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1100px; box-sizing: border-box; background: #F4F5FA; font-family: 'Public Sans', system-ui, sans-serif; color: #151A3C">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-sizing: border-box; min-height: 68px; padding: 10px 40px; background: #141B4D">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <div style="width: 28px; height: 28px; border-radius: 8px; background: #F0B54A"></div>
+      <div style="font-weight: 700; font-size: 16px; color: #FFFFFF">Society Konnect</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; flex-wrap: wrap">
+      <a href="#" style="padding: 10px 16px; border-radius: 8px; background: #2B3590; color: #FFFFFF">My society</a>
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: #F0B54A; color: #141B4D; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: 8px">E</div>
+    </div>
+  </div>
+  <div style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 28px 40px 56px; display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">Society 1</h1>
+      <div style="font-size: 14px; color: #4A5080">Whitefield · 560066 · Estate Manager view</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; background: #E8EAF6; border-radius: 12px; padding: 12px 16px; font-size: 14px; color: #333A6B">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2B3590" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="9" cy="9" r="7"/><path d="M9 8v5M9 5.5v.01"/></svg>
+      <span>This page is view only. Society Konnect confirms bookings and tells you who is coming.</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap">
+      <div style="flex: 1 1 200px; display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px">
+        <div style="width: 10px; align-self: stretch; border-radius: 5px; background: #0A6B3F"></div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 13px; color: #4A5080">Confirmed</div>
+          <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{confirmedCount}} bookings</div>
+        </div>
+      </div>
+      <div style="flex: 1 1 200px; display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px">
+        <div style="width: 10px; align-self: stretch; border-radius: 5px; background: #F0B54A"></div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 13px; color: #4A5080">Awaiting payment</div>
+          <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{awaitingCount}} bookings</div>
+        </div>
+      </div>
+      <div style="flex: 1 1 200px; display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px">
+        <div style="width: 10px; align-self: stretch; border-radius: 5px; background: #2B3590"></div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 13px; color: #4A5080">New, under review</div>
+          <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{newCount}} requests</div>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+      <div style="font-size: 18px; font-weight: 700; color: #141B4D">October 2026</div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-label="Previous month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">‹</button>
+        <button type="button" aria-label="Next month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">›</button>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 16px; overflow-x: auto">
+      <div style="min-width: 880px">
+        <div style="display: grid; grid-template-columns: 180px repeat(31, minmax(0, 1fr)); align-items: stretch; background: #E8EAF6; border-bottom: 1px solid #DDE0F0">
+          <div style="grid-column: 1; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #4A5080">Space</div>
+          <sc-for list="{{days}}" as="d" hint-placeholder-count="31">
+            <div style="grid-column: {{d.col}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 6px 0; background: {{d.bg}}">
+              <span style="font-size: 10px; font-weight: 600; color: #4A5080">{{d.dow}}</span>
+              <span style="font-size: 12px; font-weight: {{d.weight}}; color: #141B4D">{{d.num}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-for list="{{gantt}}" as="row" hint-placeholder-count="2">
+          <div style="display: grid; grid-template-columns: 180px repeat(31, minmax(0, 1fr)); align-items: center; height: 56px; border-bottom: 1px solid #E7E9F4">
+            <div style="grid-column: 1; grid-row: 1; padding: 0 16px; font-size: 14px; font-weight: 700; color: #141B4D">{{row.space}}</div>
+            <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="31">
+              <div style="grid-column: {{cell.col}}; grid-row: 1; align-self: stretch; background: {{cell.bg}}; border-left: 1px solid #EEF0F8"></div>
+            </sc-for>
+            <sc-for list="{{row.bars}}" as="b" hint-placeholder-count="1">
+              <div title="{{b.title}}" style="grid-column: {{b.col}}; grid-row: 1; z-index: 2; height: 34px; margin: 0 2px; box-sizing: border-box; border-radius: 8px; padding: 0 8px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; font-size: 12px; font-weight: 700; background: {{b.bg}}; color: {{b.fg}}; border: {{b.border}}">{{b.text}}</div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: #4A5080">
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #0A6B3F"></span>Confirmed and paid</div>
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; box-sizing: border-box; background: #FFF4DE; border: 1.5px dashed #C98A00"></span>Awaiting payment (dates not blocked until paid)</div>
+      <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #FFF3D6; border: 1px solid #F0B54A"></span>Today</div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 4px">
+      <div style="font-size: 18px; font-weight: 700; color: #141B4D">Bookings</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+          <button type="button" onClick="{{f.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}">{{f.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 16px; overflow-x: auto">
+      <div style="min-width: 820px">
+        <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 1fr 1.8fr 1.3fr; align-items: center; height: 44px; padding: 0 20px; background: #E8EAF6; color: #4A5080; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em">
+          <div>Space</div><div>Dates</div><div>Agency</div><div>What they will do</div><div>Status</div>
+        </div>
+        <sc-for list="{{list}}" as="r" hint-placeholder-count="5">
+          <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 1fr 1.8fr 1.3fr; align-items: center; min-height: 56px; padding: 8px 20px; border-top: 1px solid #E7E9F4; font-size: 14px">
+            <div style="font-weight: 600">{{r.space}}</div>
+            <div>{{r.dates}}</div>
+            <div>{{r.agency}}</div>
+            <div style="color: #333A6B; padding-right: 12px">{{r.purpose}}</div>
+            <div><span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}">{{r.pillText}}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size: 18px; font-weight: 700; color: #141B4D; margin-top: 4px">Your spaces</div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap">
+      <sc-for list="{{spaces}}" as="s" hint-placeholder-count="2">
+        <div style="flex: 1 1 260px; max-width: 360px; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+          <div style="font-size: 15px; font-weight: 700; color: #141B4D">{{s.name}}</div>
+          <div style="font-size: 13px; color: #4A5080">{{s.count}} · {{s.rate}}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { filter: 'all' };
+}
+renderVals() {
+const filter = this.state.filter;
+const today = 16;
+const dowNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const dayInfo = [];
+for (let d = 1; d <= 31; d++) {
+const w = new Date(2026, 9, d).getDay();
+dayInfo.push({ d: d, weekend: w === 0 || w === 6 });
+}
+const days = dayInfo.map((x) => ({
+col: x.d + 1,
+num: String(x.d),
+dow: dowNames[new Date(2026, 9, x.d).getDay()],
+weight: x.d === today ? '700' : '500',
+bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#DEE1F2' : 'transparent')
+}));
+const cells = dayInfo.map((x) => ({
+col: x.d + 1,
+bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#F7F8FC' : 'transparent')
+}));
+const meta = {
+confirmed: { text: 'Confirmed', pillBg: '#DDF4EA', pillFg: '#0A6B3F', barBg: '#0A6B3F', barFg: '#FFFFFF', barBorder: '1.5px solid #0A6B3F' },
+awaiting: { text: 'Awaiting payment', pillBg: '#FFE9C7', pillFg: '#7A4300', barBg: '#FFF4DE', barFg: '#7A4300', barBorder: '1.5px dashed #C98A00' },
+new: { text: 'New', pillBg: '#DCE1F7', pillFg: '#1F2A8A' }
+};
+const all = [
+{ space: 'Stall / Kiosk', s: 10, e: 11, label: 'Sat 10 – Sun 11 Oct', agency: 'Agency G', purpose: 'Product sampling', status: 'confirmed' },
+{ space: 'Stall / Kiosk', s: 17, e: 18, label: 'Sat 17 – Sun 18 Oct', agency: 'Agency H', purpose: 'Brand activation, two days', status: 'confirmed' },
+{ space: 'Open ground', s: 20, e: 22, label: 'Tue 20 – Thu 22 Oct', agency: 'Agency J', purpose: 'Test drive event', status: 'confirmed' },
+{ space: 'Stall / Kiosk', s: 24, e: 25, label: 'Sat 24 – Sun 25 Oct', agency: 'Agency A', purpose: 'Product sampling for two days', status: 'new' },
+{ space: 'Stall / Kiosk', s: 25, e: 26, label: 'Sun 25 – Mon 26 Oct', agency: 'Agency B', purpose: 'Free tasting of a new snack range', status: 'new' },
+{ space: 'Open ground', s: 24, e: 25, label: 'Sat 24 – Sun 25 Oct', agency: 'Agency A', purpose: 'Test drive event', status: 'confirmed' },
+{ space: 'Stall / Kiosk', s: 31, e: 31, label: 'Sat 31 Oct', agency: 'Agency I', purpose: 'Festival offer stall', status: 'confirmed' }
+];
+const spaceNames = ['Stall / Kiosk', 'Open ground'];
+const gantt = spaceNames.map((sp) => ({
+space: sp,
+cells: cells,
+bars: all.filter((b) => b.space === sp && b.status !== 'new').map((b) => {
+const m = meta[b.status];
+return {
+col: (b.s + 1) + ' / ' + (b.e + 2),
+bg: m.barBg,
+fg: m.barFg,
+border: m.barBorder,
+text: (b.e - b.s + 1) >= 3 ? b.agency : '',
+title: b.agency + ', ' + b.label + ', ' + m.text
+};
+})
+}));
+const count = (k) => all.filter((b) => b.status === k).length;
+const defs = [
+{ key: 'all', label: 'All (' + all.length + ')' },
+{ key: 'confirmed', label: 'Confirmed (' + count('confirmed') + ')' },
+{ key: 'awaiting', label: 'Awaiting payment (' + count('awaiting') + ')' },
+{ key: 'new', label: 'New (' + count('new') + ')' }
+];
+const list = all.filter((b) => filter === 'all' || b.status === filter).slice().sort((a, b) => a.s - b.s).map((b) => {
+const m = meta[b.status];
+return { space: b.space, dates: b.label, agency: b.agency, purpose: b.purpose, pillBg: m.pillBg, pillFg: m.pillFg, pillText: m.text };
+});
+return {
+confirmedCount: count('confirmed'),
+awaitingCount: count('awaiting'),
+newCount: count('new'),
+days: days,
+gantt: gantt,
+filters: defs.map((f) => ({
+label: f.label,
+bg: f.key === filter ? '#141B4D' : '#FFFFFF',
+fg: f.key === filter ? '#FFFFFF' : '#333A6B',
+border: f.key === filter ? '#141B4D' : '#CBD0E8',
+pick: () => this.setState({ filter: f.key })
+})),
+list: list,
+spaces: [
+{ name: 'Stall / Kiosk', count: '1 available', rate: '₹5,000 / day' },
+{ name: 'Open ground', count: '1 available', rate: '₹15,000 / day' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

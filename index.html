@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Society Konnect, MVP design review</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F5FA;color:#151A3C;font-family:'Public Sans',system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 64px}
+h1{margin:0 0 6px;font-size:30px;color:#141B4D;letter-spacing:-.01em}
+.sub{color:#4A5080;font-size:15px;margin-bottom:28px;line-height:1.5}
+h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A5080;margin:30px 0 10px}
+a.row{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:56px;box-sizing:border-box;padding:10px 18px;margin-bottom:8px;background:#fff;border:1px solid #DDE0F0;border-radius:12px;color:inherit;text-decoration:none}
+a.row:hover{border-color:#141B4D}
+.t{font-weight:700;color:#141B4D;font-size:15px}
+.d{font-size:13px;color:#4A5080;margin-top:2px}
+.go{font-size:13px;font-weight:600;color:#2B3590;white-space:nowrap}
+.note{background:#E8EAF6;border-radius:12px;padding:14px 18px;font-size:14px;color:#333A6B;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Society Konnect, MVP design review</h1>
+<div class="sub">Clickable design prototype. All names, prices and dates are sample data. Open each screen, then send feedback to the team.</div>
+<div class="note"><b>How to review:</b> start at the first screen in each section and follow the buttons. A few buttons are placeholders. Where a screen has no link to the next one, come back here.</div>
+
+<h2>1. Society onboarding</h2>
+<a class="row" href="SocietySignup.dc.html"><div><div class="t">Your details</div><div class="d">Estate Manager creates an account</div></div><span class="go">Open</span></a>
+<a class="row" href="SocietyAbout.dc.html"><div><div class="t">About your society</div><div class="d">Address, PIN code, number of apartments</div></div><span class="go">Open</span></a>
+<a class="row" href="SocietyInventory.dc.html"><div><div class="t">Create inventory</div><div class="d">How many of each space type, and the daily rate</div></div><span class="go">Open</span></a>
+<a class="row" href="SocietyDone.dc.html"><div><div class="t">Society is listed</div><div class="d">Confirmation after publishing</div></div><span class="go">Open</span></a>
+
+<h2>2. Agency</h2>
+<a class="row" href="AgencySignup.dc.html"><div><div class="t">Create account</div><div class="d">Agency or brand signs up</div></div><span class="go">Open</span></a>
+<a class="row" href="AgencyBilling.dc.html"><div><div class="t">Welcome</div><div class="d">Account verified, start exploring</div></div><span class="go">Open</span></a>
+<a class="row" href="Browse.dc.html"><div><div class="t">Browse inventory</div><div class="d">Search by locality or PIN code, filter by dates and space type</div></div><span class="go">Open</span></a>
+<a class="row" href="AssetTwoA.dc.html"><div><div class="t">Space details and dates</div><div class="d">Pick dates on the calendar</div></div><span class="go">Open</span></a>
+<a class="row" href="AssetTwoB.dc.html"><div><div class="t">Send request, first booking</div><div class="d">Includes billing details</div></div><span class="go">Open</span></a>
+<a class="row" href="AssetTwoBReturning.dc.html"><div><div class="t">Send request, returning agency</div><div class="d">Billing details already on file</div></div><span class="go">Open</span></a>
+<a class="row" href="AgencyRequests.dc.html"><div><div class="t">My requests</div><div class="d">Track status of every request (view only)</div></div><span class="go">Open</span></a>
+
+<h2>3. Admin (Society Konnect team)</h2>
+<a class="row" href="AdminRequests.dc.html"><div><div class="t">Booking requests</div><div class="d">Confirm, record payment, decline. Try the two overlapping requests on 24 to 26 Oct</div></div><span class="go">Open</span></a>
+<a class="row" href="AdminCalendar.dc.html"><div><div class="t">Booking calendar</div><div class="d">All societies, filter by society and status</div></div><span class="go">Open</span></a>
+
+<h2>4. Estate Manager</h2>
+<a class="row" href="EstateManager.dc.html"><div><div class="t">My society</div><div class="d">Bookings and calendar for one society (view only)</div></div><span class="go">Open</span></a>
+</div>
+</body>
+</html>

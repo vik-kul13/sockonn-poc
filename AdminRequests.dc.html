@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin, booking requests</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 900px; box-sizing: border-box; display: flex; flex-wrap: wrap; background: #F4F5FA; font-family: 'Public Sans', system-ui, sans-serif; color: #151A3C">
+  <div style="flex: 0 0 220px; box-sizing: border-box; background: #141B4D; padding: 28px 16px; display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+      <div style="width: 28px; height: 28px; border-radius: 8px; background: #F0B54A"></div>
+      <div style="display: flex; flex-direction: column; gap: 1px">
+        <div style="font-weight: 700; font-size: 15px; color: #FFFFFF">Society Konnect</div>
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #C3C9F0">Admin</div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 500">
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; background: #2B3590; color: #FFFFFF; font-weight: 600">Requests</a>
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Societies</a>
+      <a href="#" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Agencies</a>
+      <a href="AdminCalendar.dc.html" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Calendar</a>
+    </div>
+  </div>
+  <div style="flex: 1 1 760px; min-width: 0; box-sizing: border-box; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">Booking requests</h1>
+      <div style="font-size: 14px; color: #4A5080">Confirm a request to share payment details. Dates are blocked when the first payment is recorded.</div>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <button type="button" onClick="{{t.pick}}" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}">
+          <span>{{t.label}}</span>
+          <span style="min-width: 22px; text-align: center; padding: 1px 7px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{t.badgeBg}}; color: {{t.badgeFg}}">{{t.count}}</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <div style="flex: 1 1 340px; max-width: 440px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+        <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+          <div style="background: #FFFFFF; border: 1.5px dashed #B9BFE0; border-radius: 14px; padding: 32px 20px; text-align: center; font-size: 14px; color: #4A5080">Nothing here right now.</div>
+        </sc-if>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+          <button type="button" onClick="{{r.pick}}" style="display: flex; flex-direction: column; gap: 8px; width: 100%; box-sizing: border-box; padding: 14px 16px; text-align: left; border-radius: 14px; font-family: inherit; color: #151A3C; border: 2px solid {{r.border}}; background: {{r.bg}}">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+              <div style="font-size: 15px; font-weight: 700; color: #141B4D">{{r.agency}}</div>
+              <span style="padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}">{{r.pillText}}</span>
+            </div>
+            <div style="font-size: 13px; color: #333A6B">{{r.space}} · {{r.society}}</div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px">
+              <div style="font-size: 13px; color: #4A5080">{{r.dates}}</div>
+              <div style="font-size: 15px; font-weight: 700; color: #141B4D">{{r.total}}</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+        <div style="flex: 2 1 460px; min-width: 0; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 20px">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4A5080">Request #{{sel.id}} · {{sel.received}}</div>
+              <div style="font-size: 22px; font-weight: 700; color: #141B4D">{{sel.space}}</div>
+              <div style="font-size: 14px; color: #4A5080">{{sel.society}} · {{sel.area}}</div>
+            </div>
+            <span style="padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: {{sel.pillBg}}; color: {{sel.pillFg}}">{{sel.pillText}}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px 28px; background: #F4F5FA; border-radius: 14px; padding: 16px 18px">
+            <div style="flex: 1 1 130px; display: flex; flex-direction: column; gap: 3px"><div style="font-size: 12px; color: #4A5080">Dates</div><div style="font-size: 14px; font-weight: 600">{{sel.dates}}</div></div>
+            <div style="flex: 1 1 80px; display: flex; flex-direction: column; gap: 3px"><div style="font-size: 12px; color: #4A5080">Days</div><div style="font-size: 14px; font-weight: 600">{{sel.days}}</div></div>
+            <div style="flex: 1 1 110px; display: flex; flex-direction: column; gap: 3px"><div style="font-size: 12px; color: #4A5080">Rate</div><div style="font-size: 14px; font-weight: 600">{{sel.rate}}</div></div>
+            <div style="flex: 1 1 110px; display: flex; flex-direction: column; gap: 3px"><div style="font-size: 12px; color: #4A5080">Total</div><div style="font-size: 18px; font-weight: 700; color: #141B4D">{{sel.total}}</div></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="font-size: 13px; font-weight: 600; color: #333A6B">What they will do</div>
+            <div style="font-size: 15px; line-height: 1.5; color: #151A3C">{{sel.purpose}}</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; border: 1px solid #E7E9F4; border-radius: 14px; padding: 16px 18px">
+            <div style="font-size: 13px; font-weight: 600; color: #333A6B">Agency</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 14px">
+              <div style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700">{{sel.agency}}</span><span style="color: #4A5080">{{sel.contact}}</span></div>
+              <div style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 2px"><span style="color: #4A5080">GST number</span><span style="font-weight: 600">[GSTIN]</span></div>
+              <div style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 2px"><span style="color: #4A5080">Billing address</span><span style="font-weight: 600">[Billing address]</span></div>
+            </div>
+          </div>
+          <div style="border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; background: {{sel.checkBg}}">
+            <div style="font-size: 14px; font-weight: 700; color: {{sel.checkFg}}">{{sel.checkTitle}}</div>
+            <div style="font-size: 13px; color: {{sel.checkFg}}">{{sel.checkLine}}</div>
+          </div>
+          <sc-if value="{{sel.isNew}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap">
+              <button type="button" onClick="{{confirmReq}}" disabled="{{sel.clash}}" style="flex: 2 1 240px; height: 52px; border: 0; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; background: {{sel.confirmBg}}; color: {{sel.confirmFg}}">Confirm and block dates</button>
+              <button type="button" onClick="{{declineReq}}" style="flex: 1 1 140px; height: 52px; border: 1.5px solid #141B4D; border-radius: 12px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 15px; font-weight: 700">Decline</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{sel.isAwaiting}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 14px; background: #F4F5FA; border-radius: 14px; padding: 18px">
+              <div style="font-size: 14px; font-weight: 700; color: #141B4D">Payment</div>
+              <div style="font-size: 13px; line-height: 1.5; color: #333A6B">Share your UPI or bank details with the agency, then record the payment here. The dates are blocked for them only once payment is recorded. If another agency has paid first, this request closes automatically.</div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="utr" style="font-size: 13px; font-weight: 600; color: #333A6B">Payment reference (UTR)</label>
+                <input id="utr" type="text" placeholder="Reference number from the transfer" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #CBD0E8; border-radius: 10px; font-size: 15px; color: #151A3C; background: #FFFFFF">
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center">
+                <button type="button" onClick="{{markPaid}}" style="flex: 2 1 220px; height: 52px; border: 0; border-radius: 12px; background: #F0B54A; color: #141B4D; font-family: inherit; font-size: 15px; font-weight: 700">Mark payment received</button>
+                <button type="button" onClick="{{releaseReq}}" style="flex: 1 1 160px; height: 52px; border: 0; border-radius: 12px; background: transparent; color: #333A6B; font-family: inherit; font-size: 14px; font-weight: 600; text-decoration: underline">Cancel request</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{sel.isPaid}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 14px; background: #DDF4EA; border-radius: 14px; padding: 18px">
+              <div style="width: 36px; height: 36px; border-radius: 50%; background: #0A6B3F; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+                <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5"/></svg>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <div style="font-size: 15px; font-weight: 700; color: #0A5C36">Confirmed and paid</div>
+                <div style="font-size: 13px; color: #0A5C36">The dates are confirmed. Let the society know the agency is coming.</div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{sel.isDeclined}}" hint-placeholder-val="{{ false }}">
+            <div style="background: #E8EAF6; border-radius: 14px; padding: 16px 18px; font-size: 14px; color: #333A6B">{{sel.declineNote}}</div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = {
+tab: 'new',
+sel: '1041',
+why: {},
+status: { '1041': 'new', '1042': 'new', '1040': 'awaiting', '1038': 'paid', '1037': 'declined' }
+};
+}
+setStatus(id, s) {
+const next = { ...this.state.status, [id]: s };
+const why = { ...this.state.why };
+if (s === 'paid') {
+const rivalId = id === '1041' ? '1042' : (id === '1042' ? '1041' : null);
+if (rivalId && (next[rivalId] === 'new' || next[rivalId] === 'awaiting')) {
+next[rivalId] = 'declined';
+why[rivalId] = 'Declined automatically. The dates were taken by another booking that was paid first.';
+}
+}
+this.setState({ status: next, why: why, tab: s });
+}
+renderVals() {
+const { tab, sel, status, why } = this.state;
+const reqs = [
+{ id: '1042', agency: 'Agency B', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', area: 'Whitefield · 560066', dates: 'Sun 25 – Mon 26 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Free tasting of a new snack range for residents.', received: 'Today, 12:10' },
+{ id: '1041', agency: 'Agency A', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', area: 'Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Product sampling for two days.', received: 'Today, 11:42' },
+{ id: '1040', agency: 'Agency C', contact: '[Contact name] · [mobile]', space: 'Gate banner', society: 'Society 4', area: 'Whitefield · 560066', dates: 'Mon 26 – Sun 1 Nov', days: 7, rate: '₹2,000 / day', total: '₹14,000', purpose: 'Festive offer banner for a local jewellery store.', received: 'Yesterday' },
+{ id: '1038', agency: 'Agency D', contact: '[Contact name] · [mobile]', space: 'WhatsApp post', society: 'Society 2', area: 'HSR Layout · 560102', dates: 'Fri 23 Oct', days: 1, rate: '₹1,500 / post', total: '₹1,500', purpose: 'Announcing a new fitness studio opening.', received: '13 Oct' },
+{ id: '1037', agency: 'Agency E', contact: '[Contact name] · [mobile]', space: 'Lift poster', society: 'Society 5', area: 'Sarjapur Road · 560035', dates: 'Wed 21 – Fri 23 Oct', days: 3, rate: '₹3,000 / day', total: '₹9,000', purpose: 'Back-to-school tuition offer.', received: '12 Oct' }
+];
+const meta = {
+new: { text: 'New', bg: '#DCE1F7', fg: '#1F2A8A' },
+awaiting: { text: 'Awaiting payment', bg: '#FFE9C7', fg: '#7A4300' },
+paid: { text: 'Confirmed', bg: '#DDF4EA', fg: '#0A6B3F' },
+declined: { text: 'Declined', bg: '#E8EAF6', fg: '#4A5080' }
+};
+const tabDefs = [
+{ key: 'new', label: 'New' },
+{ key: 'awaiting', label: 'Awaiting payment' },
+{ key: 'paid', label: 'Confirmed' },
+{ key: 'declined', label: 'Declined' }
+];
+const inTab = (k) => reqs.filter((r) => status[r.id] === k);
+const tabs = tabDefs.map((t) => {
+const on = t.key === tab;
+const items = inTab(t.key);
+return {
+label: t.label,
+count: items.length,
+bg: on ? '#141B4D' : '#FFFFFF',
+fg: on ? '#FFFFFF' : '#333A6B',
+border: on ? '#141B4D' : '#CBD0E8',
+badgeBg: on ? '#F0B54A' : '#E8EAF6',
+badgeFg: '#141B4D',
+pick: () => this.setState({ tab: t.key, sel: items.length ? items[0].id : null })
+};
+});
+const shown = inTab(tab);
+const rows = shown.map((r) => {
+const m = meta[status[r.id]];
+const on = r.id === sel;
+return {
+agency: r.agency, space: r.space, society: r.society, dates: r.dates, total: r.total,
+pillBg: m.bg, pillFg: m.fg, pillText: m.text,
+border: on ? '#F0B54A' : '#DDE0F0',
+bg: on ? '#FFF8E8' : '#FFFFFF',
+pick: () => this.setState({ sel: r.id })
+};
+});
+const cur = reqs.find((r) => r.id === sel && status[r.id] === tab);
+let selView = null;
+if (cur) {
+const st = status[cur.id];
+const m = meta[st];
+let clash = false;
+let checkBg = '#DDF4EA';
+let checkFg = '#0A5C36';
+let checkTitle = 'No clash';
+let checkLine = 'No other request wants these dates.';
+const rivalId = cur.id === '1041' ? '1042' : (cur.id === '1042' ? '1041' : null);
+const rival = rivalId ? status[rivalId] : null;
+const rivalDates = cur.id === '1042' ? 'Sat 24 – Sun 25 Oct' : 'Sun 25 – Mon 26 Oct';
+if (st === 'new' || st === 'awaiting') {
+if (rival === 'paid') {
+clash = st === 'new';
+checkBg = '#FFE0D6'; checkFg = '#8A2A10';
+checkTitle = 'Dates already taken';
+checkLine = 'Request #' + rivalId + ' has been paid for ' + rivalDates + ', and Society 1 has only 1 stall. Decline this one or ask the agency for other dates.';
+} else if (rival === 'new' || rival === 'awaiting') {
+checkBg = '#FFE9C7'; checkFg = '#7A4300';
+checkTitle = 'Overlaps another request';
+checkLine = 'Request #' + rivalId + ' wants the same stall on Sun 25 Oct, and Society 1 has only 1 stall. Whoever pays first gets the dates.';
+} else if (st === 'awaiting') {
+checkBg = '#FFE9C7'; checkFg = '#7A4300';
+checkTitle = 'Dates not blocked yet';
+checkLine = 'The dates are blocked when you record this payment.';
+}
+}
+if (st === 'paid') {
+checkBg = '#DDF4EA'; checkFg = '#0A5C36';
+checkTitle = 'Dates blocked';
+checkLine = 'No one else can book this stall on these dates.';
+}
+if (st === 'declined') {
+checkBg = '#E8EAF6'; checkFg = '#333A6B';
+checkTitle = 'Request closed';
+checkLine = 'This request does not block any dates.';
+}
+selView = {
+id: cur.id, received: cur.received, space: cur.space, society: cur.society, area: cur.area,
+dates: cur.dates, days: cur.days, rate: cur.rate, total: cur.total, purpose: cur.purpose,
+agency: cur.agency, contact: cur.contact,
+pillBg: m.bg, pillFg: m.fg, pillText: m.text,
+checkBg: checkBg, checkFg: checkFg, checkTitle: checkTitle, checkLine: checkLine,
+clash: clash,
+confirmBg: clash ? '#E8EAF6' : '#F0B54A',
+confirmFg: clash ? '#8088B8' : '#141B4D',
+isNew: st === 'new', isAwaiting: st === 'awaiting', isPaid: st === 'paid', isDeclined: st === 'declined',
+declineNote: (why && why[cur.id]) || 'This request was declined.'
+};
+}
+const blank = { id: '', received: '', space: '', society: '', area: '', dates: '', days: '', rate: '', total: '', purpose: '', agency: '', contact: '', pillBg: '#FFFFFF', pillFg: '#FFFFFF', pillText: '', checkBg: '#FFFFFF', checkFg: '#FFFFFF', checkTitle: '', checkLine: '', clash: false, confirmBg: '#F0B54A', confirmFg: '#141B4D', isNew: false, isAwaiting: false, isPaid: false, isDeclined: false, declineNote: '' };
+return {
+tabs: tabs,
+rows: rows,
+listEmpty: rows.length === 0,
+hasSel: !!cur,
+sel: selView || blank,
+confirmReq: () => { if (cur) this.setStatus(cur.id, 'awaiting'); },
+declineReq: () => { if (cur) this.setStatus(cur.id, 'declined'); },
+markPaid: () => { if (cur) this.setStatus(cur.id, 'paid'); },
+releaseReq: () => { if (cur) this.setStatus(cur.id, 'declined'); }
+};
+}
+}
+</script>
+</body>
+</html>
