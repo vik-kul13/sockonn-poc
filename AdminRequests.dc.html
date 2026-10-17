@@ -31,11 +31,12 @@ input{font-family:inherit}
       <a href="#" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Agencies</a>
       <a href="AdminCalendar.dc.html" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0">Calendar</a>
     </div>
+    <a href="Login.dc.html" style="padding: 10px 12px; border-radius: 8px; color: #C3C9F0; font-size: 14px; font-weight: 500">Log out</a>
   </div>
   <div style="flex: 1 1 760px; min-width: 0; box-sizing: border-box; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 20px">
     <div style="display: flex; flex-direction: column; gap: 4px">
       <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">Booking requests</h1>
-      <div style="font-size: 14px; color: #4A5080">Confirm a request to share payment details. Dates are blocked when the first payment is recorded.</div>
+      <div style="font-size: 14px; color: #4A5080">Accept a request to ask the agency for payment. Dates are blocked when you mark a payment received, after the Estate Manager confirms it.</div>
     </div>
     <div style="display: flex; gap: 8px; flex-wrap: wrap">
       <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
@@ -61,6 +62,7 @@ input{font-family:inherit}
               <div style="font-size: 13px; color: #4A5080">{{r.dates}}</div>
               <div style="font-size: 15px; font-weight: 700; color: #141B4D">{{r.total}}</div>
             </div>
+            <sc-if value="{{r.onHold}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12px; font-weight: 600; color: #1F2A8A">On hold. The agency can see this note.</div></sc-if>
           </button>
         </sc-for>
       </div>
@@ -98,21 +100,42 @@ input{font-family:inherit}
           </div>
           <sc-if value="{{sel.isNew}}" hint-placeholder-val="{{ true }}">
             <div style="display: flex; gap: 12px; flex-wrap: wrap">
-              <button type="button" onClick="{{confirmReq}}" disabled="{{sel.clash}}" style="flex: 2 1 240px; height: 52px; border: 0; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; background: {{sel.confirmBg}}; color: {{sel.confirmFg}}">Confirm and block dates</button>
+              <button type="button" onClick="{{confirmReq}}" disabled="{{sel.clash}}" style="flex: 2 1 240px; height: 52px; border: 0; border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 700; background: {{sel.confirmBg}}; color: {{sel.confirmFg}}">Accept and request payment</button>
               <button type="button" onClick="{{declineReq}}" style="flex: 1 1 140px; height: 52px; border: 1.5px solid #141B4D; border-radius: 12px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 15px; font-weight: 700">Decline</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+              <button type="button" onClick="{{toggleHold}}" style="height: 44px; padding: 0 18px; border: 1.5px solid #1F2A8A; border-radius: 10px; background: #FFFFFF; color: #1F2A8A; font-family: inherit; font-size: 14px; font-weight: 700">{{sel.holdLabel}}</button>
+              <span style="flex: 1 1 240px; font-size: 12px; line-height: 1.45; color: #4A5080">{{sel.holdHelp}}</span>
             </div>
           </sc-if>
           <sc-if value="{{sel.isAwaiting}}" hint-placeholder-val="{{ false }}">
             <div style="display: flex; flex-direction: column; gap: 14px; background: #F4F5FA; border-radius: 14px; padding: 18px">
               <div style="font-size: 14px; font-weight: 700; color: #141B4D">Payment</div>
-              <div style="font-size: 13px; line-height: 1.5; color: #333A6B">Share your UPI or bank details with the agency, then record the payment here. The dates are blocked for them only once payment is recorded. If another agency has paid first, this request closes automatically.</div>
+              <div style="font-size: 13px; line-height: 1.5; color: #333A6B">The agency pays the apartment directly, using the UPI details saved at onboarding ({{sel.upi}}). Do not mark the payment as received until the Estate Manager has confirmed that the money arrived. Dates are blocked when you mark it received.</div>
               <div style="display: flex; flex-direction: column; gap: 6px">
+                <div style="font-size: 13px; font-weight: 700; color: {{sel.reportColor}}">{{sel.reportLine}}</div>
                 <label for="utr" style="font-size: 13px; font-weight: 600; color: #333A6B">Payment reference (UTR)</label>
-                <input id="utr" type="text" placeholder="Reference number from the transfer" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #CBD0E8; border-radius: 10px; font-size: 15px; color: #151A3C; background: #FFFFFF">
+                <input id="utr" type="text" value="{{sel.utr}}" placeholder="Reference number from the transfer" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #CBD0E8; border-radius: 10px; font-size: 15px; color: #151A3C; background: #FFFFFF">
               </div>
-              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center">
-                <button type="button" onClick="{{markPaid}}" style="flex: 2 1 220px; height: 52px; border: 0; border-radius: 12px; background: #F0B54A; color: #141B4D; font-family: inherit; font-size: 15px; font-weight: 700">Mark payment received</button>
-                <button type="button" onClick="{{releaseReq}}" style="flex: 1 1 160px; height: 52px; border: 0; border-radius: 12px; background: transparent; color: #333A6B; font-family: inherit; font-size: 14px; font-weight: 600; text-decoration: underline">Cancel request</button>
+              <div style="display: flex; flex-direction: column; gap: 10px; background: #FFFFFF; border: 1px solid #E7E9F4; border-radius: 12px; padding: 14px 16px">
+                <div style="font-size: 13px; font-weight: 700; color: #141B4D">Step 1. Ask the Estate Manager to confirm</div>
+                <div style="font-size: 13px; color: #4A5080">Estate Manager, {{sel.society}}: [EM name] · [mobile]</div>
+                <div style="font-size: 13px; line-height: 1.5; color: #151A3C; background: #F4F5FA; border-radius: 8px; padding: 10px 12px">{{sel.emMessage}}</div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+                  <button type="button" onClick="{{copyMsg}}" style="height: 44px; padding: 0 18px; border: 1.5px solid #141B4D; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 14px; font-weight: 700">{{sel.copyLabel}}</button>
+                  <span style="font-size: 12px; color: #4A5080">Send it on WhatsApp or call. The Estate Manager does not need to log in.</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px; background: #FFFFFF; border: 1px solid #E7E9F4; border-radius: 12px; padding: 14px 16px">
+                <div style="font-size: 13px; font-weight: 700; color: #141B4D">Step 2. Record the payment</div>
+                <button type="button" onClick="{{toggleEm}}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0; border: 0; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: #151A3C; text-align: left; cursor: pointer">
+                  <span style="width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2px solid {{sel.emBorder}}; background: {{sel.emBoxBg}}"><sc-if value="{{sel.emOk}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5"/></svg></sc-if></span>
+                  Estate Manager confirmed receipt
+                </button>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center">
+                  <button type="button" onClick="{{markPaid}}" style="flex: 2 1 220px; height: 52px; border: 0; border-radius: 12px; background: {{sel.paidBg}}; color: {{sel.paidFg}}; font-family: inherit; font-size: 15px; font-weight: 700">Mark payment received</button>
+                  <button type="button" onClick="{{releaseReq}}" style="flex: 1 1 160px; height: 52px; border: 0; border-radius: 12px; background: transparent; color: #333A6B; font-family: inherit; font-size: 14px; font-weight: 600; text-decoration: underline">Cancel request</button>
+                </div>
               </div>
             </div>
           </sc-if>
@@ -122,8 +145,8 @@ input{font-family:inherit}
                 <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5l2.5 2.5L11 4.5"/></svg>
               </div>
               <div style="display: flex; flex-direction: column; gap: 2px">
-                <div style="font-size: 15px; font-weight: 700; color: #0A5C36">Confirmed and paid</div>
-                <div style="font-size: 13px; color: #0A5C36">The dates are confirmed. Let the society know the agency is coming.</div>
+                <div style="font-size: 15px; font-weight: 700; color: #0A5C36">Payment confirmed</div>
+                <div style="font-size: 13px; color: #0A5C36">The Estate Manager confirmed the money arrived. The dates are blocked. Let the society know the agency is coming.</div>
               </div>
             </div>
           </sc-if>
@@ -144,29 +167,23 @@ this.state = {
 tab: 'new',
 sel: '1041',
 why: {},
+hold: { '1041': true },
+emOk: {},
+copied: {},
 status: { '1041': 'new', '1042': 'new', '1040': 'awaiting', '1038': 'paid', '1037': 'declined' }
 };
 }
 setStatus(id, s) {
-const next = { ...this.state.status, [id]: s };
-const why = { ...this.state.why };
-if (s === 'paid') {
-const rivalId = id === '1041' ? '1042' : (id === '1042' ? '1041' : null);
-if (rivalId && (next[rivalId] === 'new' || next[rivalId] === 'awaiting')) {
-next[rivalId] = 'declined';
-why[rivalId] = 'Declined automatically. The dates were taken by another booking that was paid first.';
-}
-}
-this.setState({ status: next, why: why, tab: s });
+this.setState({ status: { ...this.state.status, [id]: s }, tab: s });
 }
 renderVals() {
-const { tab, sel, status, why } = this.state;
+const { tab, sel, status, why, hold, emOk, copied } = this.state;
 const reqs = [
-{ id: '1042', agency: 'Agency B', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', area: 'Whitefield · 560066', dates: 'Sun 25 – Mon 26 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Free tasting of a new snack range for residents.', received: 'Today, 12:10' },
-{ id: '1041', agency: 'Agency A', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', area: 'Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Product sampling for two days.', received: 'Today, 11:42' },
-{ id: '1040', agency: 'Agency C', contact: '[Contact name] · [mobile]', space: 'Gate banner', society: 'Society 4', area: 'Whitefield · 560066', dates: 'Mon 26 – Sun 1 Nov', days: 7, rate: '₹2,000 / day', total: '₹14,000', purpose: 'Festive offer banner for a local jewellery store.', received: 'Yesterday' },
-{ id: '1038', agency: 'Agency D', contact: '[Contact name] · [mobile]', space: 'WhatsApp post', society: 'Society 2', area: 'HSR Layout · 560102', dates: 'Fri 23 Oct', days: 1, rate: '₹1,500 / post', total: '₹1,500', purpose: 'Announcing a new fitness studio opening.', received: '13 Oct' },
-{ id: '1037', agency: 'Agency E', contact: '[Contact name] · [mobile]', space: 'Lift poster', society: 'Society 5', area: 'Sarjapur Road · 560035', dates: 'Wed 21 – Fri 23 Oct', days: 3, rate: '₹3,000 / day', total: '₹9,000', purpose: 'Back-to-school tuition offer.', received: '12 Oct' }
+{ id: '1042', agency: 'Agency B', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', upi: 'society1@upi', area: 'Whitefield · 560066', dates: 'Sun 25 – Mon 26 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Free tasting of a new snack range for residents.', received: 'Today, 11:42' },
+{ id: '1041', agency: 'Agency A', contact: '[Contact name] · [mobile]', space: 'Stall / Kiosk', society: 'Society 1', upi: 'society1@upi', area: 'Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹5,000 / day', total: '₹10,000', purpose: 'Product sampling for two days.', received: 'Today, 12:10' },
+{ id: '1040', reportedUtr: '412345678901', agency: 'Agency C', contact: '[Contact name] · [mobile]', space: 'Gate banner', society: 'Society 4', upi: 'society4@upi', area: 'Whitefield · 560066', dates: 'Mon 26 – Sun 1 Nov', days: 7, rate: '₹2,000 / day', total: '₹14,000', purpose: 'Festive offer banner for a local jewellery store.', received: 'Yesterday' },
+{ id: '1038', agency: 'Agency D', contact: '[Contact name] · [mobile]', space: 'WhatsApp post', society: 'Society 2', upi: 'society2@upi', area: 'HSR Layout · 560102', dates: 'Fri 23 Oct', days: 1, rate: '₹1,500 / post', total: '₹1,500', purpose: 'Announcing a new fitness studio opening.', received: '13 Oct' },
+{ id: '1037', agency: 'Agency E', contact: '[Contact name] · [mobile]', space: 'Lift poster', society: 'Society 5', upi: 'society5@upi', area: 'Sarjapur Road · 560035', dates: 'Wed 21 – Fri 23 Oct', days: 3, rate: '₹3,000 / day', total: '₹9,000', purpose: 'Back-to-school tuition offer.', received: '12 Oct' }
 ];
 const meta = {
 new: { text: 'New', bg: '#DCE1F7', fg: '#1F2A8A' },
@@ -202,6 +219,7 @@ const on = r.id === sel;
 return {
 agency: r.agency, space: r.space, society: r.society, dates: r.dates, total: r.total,
 pillBg: m.bg, pillFg: m.fg, pillText: m.text,
+onHold: status[r.id] === 'new' && !!hold[r.id],
 border: on ? '#F0B54A' : '#DDE0F0',
 bg: on ? '#FFF8E8' : '#FFFFFF',
 pick: () => this.setState({ sel: r.id })
@@ -229,7 +247,7 @@ checkLine = 'Request #' + rivalId + ' has been paid for ' + rivalDates + ', and 
 } else if (rival === 'new' || rival === 'awaiting') {
 checkBg = '#FFE9C7'; checkFg = '#7A4300';
 checkTitle = 'Overlaps another request';
-checkLine = 'Request #' + rivalId + ' wants the same stall on Sun 25 Oct, and Society 1 has only 1 stall. Whoever pays first gets the dates.';
+checkLine = 'Request #' + rivalId + ' wants the same stall on Sun 25 Oct, and Society 1 has only 1 stall. Accept one and put the other on hold.';
 } else if (st === 'awaiting') {
 checkBg = '#FFE9C7'; checkFg = '#7A4300';
 checkTitle = 'Dates not blocked yet';
@@ -249,17 +267,28 @@ checkLine = 'This request does not block any dates.';
 selView = {
 id: cur.id, received: cur.received, space: cur.space, society: cur.society, area: cur.area,
 dates: cur.dates, days: cur.days, rate: cur.rate, total: cur.total, purpose: cur.purpose,
-agency: cur.agency, contact: cur.contact,
+agency: cur.agency, contact: cur.contact, upi: cur.upi, utr: cur.reportedUtr || '',
+reportLine: cur.reportedUtr ? 'Agency reports payment made. UTR ' + cur.reportedUtr : 'The agency has not reported a payment yet.',
+reportColor: cur.reportedUtr ? '#0A5C36' : '#4A5080',
 pillBg: m.bg, pillFg: m.fg, pillText: m.text,
 checkBg: checkBg, checkFg: checkFg, checkTitle: checkTitle, checkLine: checkLine,
 clash: clash,
 confirmBg: clash ? '#E8EAF6' : '#F0B54A',
 confirmFg: clash ? '#8088B8' : '#141B4D',
+holdLabel: hold[cur.id] ? 'Remove hold' : 'Put on hold',
+holdHelp: hold[cur.id] ? 'The agency sees: Another request for these dates is ahead of yours.' : 'Use this when another request for the same dates is ahead. The agency sees a note, and the request stays New.',
+emMessage: 'Hi, please confirm: has Society Konnect booking #' + cur.id + ' (' + cur.agency + ', ' + cur.space + ', ' + cur.dates + ') been paid ' + cur.total + ' to ' + cur.upi + '?' + (cur.reportedUtr ? ' Reference: ' + cur.reportedUtr + '.' : ''),
+copyLabel: copied[cur.id] ? 'Copied' : 'Copy message',
+emOk: !!emOk[cur.id],
+emBorder: emOk[cur.id] ? '#0A6B3F' : '#8088B8',
+emBoxBg: emOk[cur.id] ? '#0A6B3F' : '#FFFFFF',
+paidBg: emOk[cur.id] ? '#F0B54A' : '#E8EAF6',
+paidFg: emOk[cur.id] ? '#141B4D' : '#8088B8',
 isNew: st === 'new', isAwaiting: st === 'awaiting', isPaid: st === 'paid', isDeclined: st === 'declined',
 declineNote: (why && why[cur.id]) || 'This request was declined.'
 };
 }
-const blank = { id: '', received: '', space: '', society: '', area: '', dates: '', days: '', rate: '', total: '', purpose: '', agency: '', contact: '', pillBg: '#FFFFFF', pillFg: '#FFFFFF', pillText: '', checkBg: '#FFFFFF', checkFg: '#FFFFFF', checkTitle: '', checkLine: '', clash: false, confirmBg: '#F0B54A', confirmFg: '#141B4D', isNew: false, isAwaiting: false, isPaid: false, isDeclined: false, declineNote: '' };
+const blank = { id: '', received: '', space: '', society: '', area: '', dates: '', days: '', rate: '', total: '', purpose: '', agency: '', contact: '', upi: '', utr: '', reportLine: '', reportColor: '#4A5080', pillBg: '#FFFFFF', pillFg: '#FFFFFF', pillText: '', checkBg: '#FFFFFF', checkFg: '#FFFFFF', checkTitle: '', checkLine: '', emMessage: '', holdLabel: '', holdHelp: '', copyLabel: '', emOk: false, emBorder: '#8088B8', emBoxBg: '#FFFFFF', paidBg: '#E8EAF6', paidFg: '#8088B8', clash: false, confirmBg: '#F0B54A', confirmFg: '#141B4D', isNew: false, isAwaiting: false, isPaid: false, isDeclined: false, declineNote: '' };
 return {
 tabs: tabs,
 rows: rows,
@@ -268,7 +297,10 @@ hasSel: !!cur,
 sel: selView || blank,
 confirmReq: () => { if (cur) this.setStatus(cur.id, 'awaiting'); },
 declineReq: () => { if (cur) this.setStatus(cur.id, 'declined'); },
-markPaid: () => { if (cur) this.setStatus(cur.id, 'paid'); },
+markPaid: () => { if (cur && emOk[cur.id]) this.setStatus(cur.id, 'paid'); },
+toggleHold: () => { if (cur) this.setState({ hold: { ...hold, [cur.id]: !hold[cur.id] } }); },
+toggleEm: () => { if (cur) this.setState({ emOk: { ...emOk, [cur.id]: !emOk[cur.id] } }); },
+copyMsg: () => { if (cur) { try { navigator.clipboard.writeText(selView.emMessage).catch(() => {}); } catch (e) {} this.setState({ copied: { ...copied, [cur.id]: true } }); } },
 releaseReq: () => { if (cur) this.setStatus(cur.id, 'declined'); }
 };
 }

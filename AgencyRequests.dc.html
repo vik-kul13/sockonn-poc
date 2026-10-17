@@ -13,6 +13,7 @@
 <style>
 body{margin:0}
 a{color:inherit;text-decoration:none}
+input{font-family:inherit}
 </style>
 </helmet>
 <div style="width: 100%; min-height: 900px; box-sizing: border-box; background: #F4F5FA; font-family: 'Public Sans', system-ui, sans-serif; color: #151A3C">
@@ -23,70 +24,171 @@ a{color:inherit;text-decoration:none}
     </div>
     <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; flex-wrap: wrap">
       <a href="Browse.dc.html" style="padding: 10px 16px; border-radius: 8px; color: #C3C9F0">Browse</a>
-      <a href="#" style="padding: 10px 16px; border-radius: 8px; background: #2B3590; color: #FFFFFF">My requests</a>
+      <a href="#" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; background: #2B3590; color: #FFFFFF">My requests
+        <sc-if value="{{hasAttention}}" hint-placeholder-val="{{ true }}"><span style="min-width: 20px; box-sizing: border-box; padding: 1px 7px; border-radius: 999px; background: #F0B54A; color: #141B4D; font-size: 12px; font-weight: 700; text-align: center">{{attentionCount}}</span></sc-if>
+      </a>
+      <a href="Login.dc.html" style="padding: 10px 16px; border-radius: 8px; color: #C3C9F0">Log out</a>
       <div style="width: 36px; height: 36px; border-radius: 50%; background: #F0B54A; color: #141B4D; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: 8px">A</div>
     </div>
   </div>
   <div style="max-width: 1120px; margin: 0 auto; box-sizing: border-box; padding: 28px 40px 56px; display: flex; flex-direction: column; gap: 20px">
-    <div style="display: flex; flex-direction: column; gap: 6px">
-      <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">My requests</h1>
-      <div style="font-size: 14px; color: #4A5080">Track every booking request you have sent.</div>
-    </div>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap">
-      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
-        <button type="button" onClick="{{t.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}">{{t.label}}</button>
-      </sc-for>
-    </div>
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
-      <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
-        <sc-for list="{{list}}" as="r" hint-placeholder-count="4">
-          <button type="button" onClick="{{r.pick}}" style="text-align: left; font-family: inherit; color: inherit; box-sizing: border-box; width: 100%; min-height: 88px; padding: 14px 18px; border-radius: 14px; background: #FFFFFF; border: 2px solid {{r.border}}; display: flex; flex-direction: column; gap: 6px; cursor: pointer">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
-              <span style="font-size: 16px; font-weight: 700; color: #141B4D">{{r.space}}</span>
-              <span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}; white-space: nowrap">{{r.pillText}}</span>
-            </div>
-            <div style="font-size: 13px; color: #4A5080">{{r.society}}</div>
-            <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span>{{r.dates}}</span><span style="font-weight: 700">{{r.total}}</span></div>
-          </button>
-        </sc-for>
-        <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
-          <div style="padding: 28px; text-align: center; font-size: 14px; color: #4A5080; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px">No requests here yet.</div>
-        </sc-if>
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: #141B4D">My requests</h1>
+        <div style="font-size: 14px; color: #4A5080">Track every booking request you have sent.</div>
       </div>
-      <div style="flex: 1.2 1 420px; min-width: 0; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 18px">
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap">
-          <div style="display: flex; flex-direction: column; gap: 3px">
-            <div style="font-size: 20px; font-weight: 700; color: #141B4D">{{sel.space}}</div>
-            <div style="font-size: 13px; color: #4A5080">{{sel.society}} · Request #{{sel.id}}</div>
-          </div>
-          <span style="padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: {{sel.pillBg}}; color: {{sel.pillFg}}">{{sel.pillText}}</span>
+      <div style="display: flex; gap: 4px; padding: 4px; background: #E8EAF6; border-radius: 12px">
+        <button type="button" onClick="{{showList}}" style="height: 40px; padding: 0 18px; border: 0; border-radius: 9px; font-family: inherit; font-size: 14px; font-weight: 600; background: {{listBg}}; color: {{listFg}}">List</button>
+        <button type="button" onClick="{{showCalendar}}" style="height: 40px; padding: 0 18px; border: 0; border-radius: 9px; font-family: inherit; font-size: 14px; font-weight: 600; background: {{calBg}}; color: {{calFg}}">Calendar</button>
+      </div>
+    </div>
+    <sc-if value="{{showBanner}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; background: #FFF4DE; border: 1.5px solid #C98A00; border-radius: 14px; padding: 14px 18px">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <div style="font-size: 15px; font-weight: 700; color: #7A4300">{{bannerTitle}}</div>
+          <div style="font-size: 13px; color: #7A4300">{{bannerLine}}</div>
         </div>
-        <div style="background: {{sel.noteBg}}; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
-          <div style="font-size: 15px; font-weight: 700; color: {{sel.noteFg}}">{{sel.noteTitle}}</div>
-          <div style="font-size: 14px; line-height: 1.5; color: #333A6B">{{sel.noteBody}}</div>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
-          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Dates</span><span style="font-weight: 600; text-align: right">{{sel.dates}}</span></div>
-          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Days</span><span style="font-weight: 600">{{sel.days}}</span></div>
-          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Rate</span><span style="font-weight: 600">{{sel.rate}}</span></div>
-          <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">What you will do</span><span style="font-weight: 600; text-align: right">{{sel.purpose}}</span></div>
-          <div style="height: 1px; background: #E7E9F4"></div>
-          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-weight: 600">Total</span><span style="font-size: 22px; font-weight: 700; color: #141B4D">{{sel.total}}</span></div>
-        </div>
-        <div style="height: 1px; background: #E7E9F4"></div>
-        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4A5080">Progress</div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <sc-for list="{{sel.steps}}" as="s" hint-placeholder-count="4">
-            <div style="display: flex; align-items: center; gap: 12px">
-              <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: {{s.dotBg}}; border: 2px solid {{s.dotBorder}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 700">{{s.mark}}</div>
-              <div style="display: flex; flex-direction: column; gap: 1px">
-                <div style="font-size: 14px; font-weight: {{s.weight}}; color: {{s.color}}">{{s.label}}</div>
-              </div>
-            </div>
+        <button type="button" onClick="{{goPay}}" style="height: 44px; padding: 0 20px; border: 0; border-radius: 10px; background: #F0B54A; color: #141B4D; font-family: inherit; font-size: 14px; font-weight: 700">Pay now</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+            <button type="button" onClick="{{t.pick}}" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; border: 1.5px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}">
+              <sc-if value="{{t.attention}}" hint-placeholder-val="{{ false }}"><span style="width: 9px; height: 9px; border-radius: 50%; background: #C98A00"></span></sc-if>
+              <span>{{t.label}}</span>
+              <sc-if value="{{t.attention}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: #F0B54A; color: #141B4D">Action needed</span></sc-if>
+            </button>
           </sc-for>
         </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+          <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{list}}" as="r" hint-placeholder-count="4">
+              <button type="button" onClick="{{r.pick}}" style="text-align: left; font-family: inherit; color: inherit; box-sizing: border-box; width: 100%; min-height: 88px; padding: 14px 18px; border-radius: 14px; background: {{r.bg}}; border: 2px solid {{r.border}}; display: flex; flex-direction: column; gap: 6px; cursor: pointer">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+                  <span style="font-size: 16px; font-weight: 700; color: #141B4D">{{r.space}}</span>
+                  <span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{r.pillBg}}; color: {{r.pillFg}}; white-space: nowrap">{{r.pillText}}</span>
+                </div>
+                <div style="font-size: 13px; color: #4A5080">{{r.society}}</div>
+                <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span>{{r.dates}}</span><span style="font-weight: 700">{{r.total}}</span></div>
+                <sc-if value="{{r.onHold}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12px; font-weight: 600; color: #1F2A8A">On hold. Another request for these dates is ahead of yours.</div></sc-if>
+              </button>
+            </sc-for>
+            <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 28px; text-align: center; font-size: 14px; color: #4A5080; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 14px">No requests here yet.</div>
+            </sc-if>
+          </div>
+          <div style="flex: 1.2 1 420px; min-width: 0; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 18px">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+              <div style="display: flex; flex-direction: column; gap: 3px">
+                <div style="font-size: 20px; font-weight: 700; color: #141B4D">{{sel.space}}</div>
+                <div style="font-size: 13px; color: #4A5080">{{sel.society}} · Request #{{sel.id}}</div>
+              </div>
+              <span style="padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: {{sel.pillBg}}; color: {{sel.pillFg}}">{{sel.pillText}}</span>
+            </div>
+            <div style="background: {{sel.noteBg}}; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
+              <div style="font-size: 15px; font-weight: 700; color: {{sel.noteFg}}">{{sel.noteTitle}}</div>
+              <div style="font-size: 14px; line-height: 1.5; color: #333A6B">{{sel.noteBody}}</div>
+            </div>
+            <sc-if value="{{sel.showPay}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 16px; border: 2px solid #F0B54A; border-radius: 14px; padding: 18px">
+                <div style="font-size: 15px; font-weight: 700; color: #141B4D">Pay the apartment directly</div>
+                <div style="display: flex; gap: 18px; flex-wrap: wrap; align-items: center">
+                  <svg width="124" height="124" viewBox="0 0 124 124" role="img" aria-label="Sample QR code" style="flex-shrink: 0; border: 1px solid #DDE0F0; border-radius: 10px; background: #FFFFFF">
+                    <rect x="12" y="12" width="32" height="32" fill="#141B4D"/><rect x="18" y="18" width="20" height="20" fill="#FFFFFF"/><rect x="23" y="23" width="10" height="10" fill="#141B4D"/>
+                    <rect x="80" y="12" width="32" height="32" fill="#141B4D"/><rect x="86" y="18" width="20" height="20" fill="#FFFFFF"/><rect x="91" y="23" width="10" height="10" fill="#141B4D"/>
+                    <rect x="12" y="80" width="32" height="32" fill="#141B4D"/><rect x="18" y="86" width="20" height="20" fill="#FFFFFF"/><rect x="23" y="91" width="10" height="10" fill="#141B4D"/>
+                    <rect x="52" y="14" width="8" height="8" fill="#141B4D"/><rect x="62" y="24" width="8" height="8" fill="#141B4D"/><rect x="52" y="34" width="8" height="8" fill="#141B4D"/>
+                    <rect x="52" y="52" width="10" height="10" fill="#141B4D"/><rect x="70" y="52" width="8" height="8" fill="#141B4D"/><rect x="84" y="56" width="10" height="10" fill="#141B4D"/><rect x="100" y="52" width="10" height="10" fill="#141B4D"/>
+                    <rect x="14" y="54" width="8" height="8" fill="#141B4D"/><rect x="30" y="60" width="10" height="10" fill="#141B4D"/><rect x="56" y="70" width="8" height="8" fill="#141B4D"/><rect x="72" y="76" width="10" height="10" fill="#141B4D"/>
+                    <rect x="90" y="80" width="10" height="10" fill="#141B4D"/><rect x="104" y="92" width="8" height="8" fill="#141B4D"/><rect x="58" y="92" width="10" height="10" fill="#141B4D"/><rect x="78" y="104" width="10" height="8" fill="#141B4D"/><rect x="96" y="104" width="12" height="8" fill="#141B4D"/>
+                  </svg>
+                  <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; flex: 1 1 200px; min-width: 0">
+                    <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Pay to</span><span style="font-weight: 600; text-align: right">{{sel.payee}}</span></div>
+                    <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">UPI ID</span><span style="font-weight: 700; text-align: right">{{sel.upi}}</span></div>
+                    <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Amount</span><span style="font-size: 18px; font-weight: 700; color: #141B4D">{{sel.total}}</span></div>
+                    <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Note to add</span><span style="font-weight: 600; text-align: right">{{sel.ref}}</span></div>
+                  </div>
+                </div>
+                <div style="height: 1px; background: #E7E9F4"></div>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <label for="utr" style="font-size: 13px; font-weight: 600; color: #333A6B">After paying, enter the UPI reference number (UTR) <span style="color: #B3361B">*</span></label>
+                  <input id="utr" type="text" inputmode="numeric" placeholder="12-digit reference from your UPI app" value="{{utr}}" onChange="{{onUtr}}" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #CBD0E8; border-radius: 10px; font-size: 15px; color: #151A3C; background: #FFFFFF">
+                </div>
+                <button type="button" onClick="{{markPaid}}" style="height: 52px; border: 0; border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: 700; background: {{paidBg}}; color: {{paidFg}}">I've paid</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{sel.showSubmitted}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 4px; background: #F4F5FA; border-radius: 12px; padding: 14px 16px; font-size: 14px; color: #333A6B">
+                <span style="font-weight: 700; color: #141B4D">Your reference</span>
+                <span>{{sel.submittedUtr}}</span>
+              </div>
+            </sc-if>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+              <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Dates</span><span style="font-weight: 600; text-align: right">{{sel.dates}}</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Days</span><span style="font-weight: 600">{{sel.days}}</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">Rate</span><span style="font-weight: 600">{{sel.rate}}</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #4A5080">What you will do</span><span style="font-weight: 600; text-align: right">{{sel.purpose}}</span></div>
+              <div style="height: 1px; background: #E7E9F4"></div>
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-weight: 600">Total</span><span style="font-size: 22px; font-weight: 700; color: #141B4D">{{sel.total}}</span></div>
+            </div>
+            <div style="height: 1px; background: #E7E9F4"></div>
+            <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4A5080">Progress</div>
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <sc-for list="{{sel.steps}}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: {{s.dotBg}}; border: 2px solid {{s.dotBorder}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 700">{{s.mark}}</div>
+                  <div style="font-size: 14px; font-weight: {{s.weight}}; color: {{s.color}}">{{s.label}}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </sc-if>
+    <sc-if value="{{isCalendar}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+          <div style="font-size: 18px; font-weight: 700; color: #141B4D">October 2026</div>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <button type="button" aria-label="Previous month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">‹</button>
+            <button type="button" aria-label="Next month" style="width: 44px; height: 44px; border: 1px solid #CBD0E8; border-radius: 10px; background: #FFFFFF; color: #141B4D; font-family: inherit; font-size: 18px">›</button>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #DDE0F0; border-radius: 16px; overflow-x: auto">
+          <div style="min-width: 900px">
+            <div style="display: grid; grid-template-columns: 200px repeat(31, minmax(0, 1fr)); align-items: stretch; background: #E8EAF6; border-bottom: 1px solid #DDE0F0">
+              <div style="grid-column: 1; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #4A5080">Booking</div>
+              <sc-for list="{{days}}" as="d" hint-placeholder-count="31">
+                <div style="grid-column: {{d.col}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 6px 0; background: {{d.bg}}">
+                  <span style="font-size: 10px; font-weight: 600; color: #4A5080">{{d.dow}}</span>
+                  <span style="font-size: 12px; font-weight: {{d.weight}}; color: #141B4D">{{d.num}}</span>
+                </div>
+              </sc-for>
+            </div>
+            <sc-for list="{{gantt}}" as="row" hint-placeholder-count="3">
+              <div style="display: grid; grid-template-columns: 200px repeat(31, minmax(0, 1fr)); align-items: center; height: 56px; border-bottom: 1px solid #E7E9F4">
+                <div style="grid-column: 1; grid-row: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+                  <div style="font-size: 14px; font-weight: 700; color: #141B4D">{{row.space}}</div>
+                  <div style="font-size: 12px; color: #4A5080">{{row.society}} · #{{row.id}}</div>
+                </div>
+                <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="31">
+                  <div style="grid-column: {{cell.col}}; grid-row: 1; align-self: stretch; background: {{cell.bg}}; border-left: 1px solid #EEF0F8"></div>
+                </sc-for>
+                <div title="{{row.title}}" style="grid-column: {{row.col}}; grid-row: 1; z-index: 2; height: 34px; margin: 0 2px; box-sizing: border-box; border-radius: 8px; padding: 0 8px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; font-size: 12px; font-weight: 700; background: {{row.bg}}; color: {{row.fg}}; border: {{row.border}}">{{row.text}}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: #4A5080">
+          <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; background: #0A6B3F"></span>Confirmed and paid</div>
+          <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; box-sizing: border-box; background: #FFF4DE; border: 1.5px dashed #C98A00"></span>Awaiting payment (dates not secured until paid)</div>
+          <div style="display: flex; align-items: center; gap: 8px"><span style="width: 14px; height: 14px; border-radius: 4px; box-sizing: border-box; background: #DCE1F7; border: 1.5px dashed #1F2A8A"></span>New, being reviewed</div>
+        </div>
+        <div style="font-size: 12px; color: #4A5080">Declined requests are not shown on the calendar.</div>
+      </div>
+    </sc-if>
   </div>
 </div>
 </x-dc>
@@ -94,24 +196,26 @@ a{color:inherit;text-decoration:none}
 class Component extends DCLogic {
 constructor(props) {
 super(props);
-this.state = { tab: 'all', sel: '1036' };
+this.state = { tab: 'all', sel: '1036', view: 'list', submitted: {}, utr: '' };
 }
 renderVals() {
-const tab = this.state.tab;
-const sel = this.state.sel;
+const { tab, sel, view, submitted, utr } = this.state;
 const meta = {
 new: { text: 'New', pillBg: '#DCE1F7', pillFg: '#1F2A8A', noteBg: '#EEF0FB', noteFg: '#1F2A8A', title: 'Request received', body: 'We are checking availability with the society. You will hear from us soon. Your dates are not held yet.' },
-awaiting: { text: 'Awaiting payment', pillBg: '#FFE9C7', pillFg: '#7A4300', noteBg: '#FFF4DE', noteFg: '#7A4300', title: 'Payment needed to secure your dates', body: 'Society Konnect has shared payment details with you. Dates are secured once your payment is received. If another agency pays first, you are refunded in full.' },
-confirmed: { text: 'Confirmed', pillBg: '#DDF4EA', pillFg: '#0A6B3F', noteBg: '#E9F8F0', noteFg: '#0A5C36', title: 'Confirmed and paid', body: 'Payment received. The society has been informed that you are coming on these dates.' },
+awaiting: { text: 'Awaiting payment', pillBg: '#FFE9C7', pillFg: '#7A4300', noteBg: '#FFF4DE', noteFg: '#7A4300', title: 'Accepted. Pay to secure your dates', body: 'Your request was accepted. Pay the apartment using the details below. Dates are secured once your payment is confirmed.' },
+submitted: { text: 'Payment submitted', pillBg: '#FFE9C7', pillFg: '#7A4300', noteBg: '#FFF4DE', noteFg: '#7A4300', title: 'Payment submitted', body: 'Thanks. We are checking with the apartment that your payment has arrived. Your booking is confirmed once they confirm it.' },
+confirmed: { text: 'Confirmed', pillBg: '#DDF4EA', pillFg: '#0A6B3F', noteBg: '#E9F8F0', noteFg: '#0A5C36', title: 'Payment confirmed', body: 'The apartment has confirmed your payment. Your dates are secured and the society knows you are coming.' },
 declined: { text: 'Declined', pillBg: '#E8EAF6', pillFg: '#4A5080', noteBg: '#F4F5FA', noteFg: '#333A6B', title: 'Not available', body: 'This request could not be accepted. You can browse other dates or spaces.' }
 };
 const all = [
-{ id: '1041', space: 'Stall / Kiosk', society: 'Society 1 · Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Product sampling for two days', status: 'new', reached: 1 },
-{ id: '1036', space: 'Stall / Kiosk', society: 'Society 3 · Marathahalli · 560037', dates: 'Sun 25 – Mon 26 Oct', days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Brand activation', status: 'awaiting', reached: 3 },
-{ id: '1031', space: 'Open ground', society: 'Society 1 · Whitefield · 560066', dates: 'Sat 24 – Sun 25 Oct', days: 2, rate: '₹15,000 / day', total: 15000 * 2, purpose: 'Test drive event', status: 'confirmed', reached: 4 },
-{ id: '1029', space: 'Gate banner', society: 'Society 4 · Whitefield · 560066', dates: 'Mon 5 – Sun 11 Oct', days: 7, rate: '₹2,000 / day', total: 2000 * 7, purpose: 'Store launch banner', status: 'declined', reached: 2 }
+{ id: '1041', space: 'Stall / Kiosk', society: 'Society 1 · Whitefield · 560066', payee: 'Society 1', upi: 'society1@upi', dates: 'Sat 24 – Sun 25 Oct', s: 24, e: 25, days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Product sampling for two days', status: 'new', hold: true, reached: 1 },
+{ id: '1036', space: 'Stall / Kiosk', society: 'Society 3 · Marathahalli · 560037', payee: 'Society 3', upi: 'society3@upi', dates: 'Sun 25 – Mon 26 Oct', s: 25, e: 26, days: 2, rate: '₹5,000 / day', total: 5000 * 2, purpose: 'Brand activation', status: 'awaiting', reached: 3 },
+{ id: '1031', space: 'Open ground', society: 'Society 1 · Whitefield · 560066', payee: 'Society 1', upi: 'society1@upi', dates: 'Sat 24 – Sun 25 Oct', s: 24, e: 25, days: 2, rate: '₹15,000 / day', total: 15000 * 2, purpose: 'Test drive event', status: 'confirmed', reached: 4 },
+{ id: '1029', space: 'Gate banner', society: 'Society 4 · Whitefield · 560066', payee: 'Society 4', upi: 'society4@upi', dates: 'Mon 5 – Sun 11 Oct', s: 5, e: 11, days: 7, rate: '₹2,000 / day', total: 2000 * 7, purpose: 'Store launch banner', status: 'declined', reached: 2 }
 ];
 const inr = (n) => '₹' + n.toLocaleString('en-IN');
+const eff = (r) => (r.status === 'awaiting' && submitted[r.id]) ? 'submitted' : r.status;
+const needPay = all.filter((r) => r.status === 'awaiting' && !submitted[r.id]);
 const count = (k) => all.filter((r) => r.status === k).length;
 const tabDefs = [
 { key: 'all', label: 'All (' + all.length + ')' },
@@ -122,14 +226,17 @@ const tabDefs = [
 ];
 const rows = all.filter((r) => tab === 'all' || r.status === tab);
 const cur = all.find((r) => r.id === sel) || all[0];
-const m = meta[cur.status];
-const stepNames = ['Request sent', 'Reviewed by Society Konnect', 'Payment details shared', 'Confirmed and paid'];
+const st = eff(cur);
+const onHold = cur.status === 'new' && !!cur.hold;
+const m = onHold ? { ...meta.new, title: 'On hold', body: 'Another request for these dates is ahead of yours. We will update you as soon as we know. Your dates are not held yet.' } : meta[st];
+const stepNames = ['Request sent', 'Reviewed by Society Konnect', 'Accepted, payment needed', 'Payment confirmed'];
 const steps = stepNames.map((label, i) => {
 const n = i + 1;
 let done = n <= cur.reached;
-let declinedHere = cur.status === 'declined' && n === 2;
+const declinedHere = cur.status === 'declined' && n === 2;
 let lbl = declinedHere ? 'Reviewed: declined' : label;
-if (cur.status === 'declined' && n > 2) { done = false; }
+if (st === 'submitted' && n === 3) lbl = 'Payment submitted, being matched';
+if (cur.status === 'declined' && n > 2) done = false;
 return {
 label: lbl,
 mark: declinedHere ? '×' : (done ? '✓' : ''),
@@ -139,28 +246,80 @@ weight: done ? '700' : '500',
 color: done ? '#141B4D' : '#7C82A8'
 };
 });
+const today = 16;
+const dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const dayInfo = [];
+for (let d = 1; d <= 31; d++) { const w = new Date(2026, 9, d).getDay(); dayInfo.push({ d: d, weekend: w === 0 || w === 6 }); }
+const days = dayInfo.map((x) => ({ col: x.d + 1, num: String(x.d), dow: dow[new Date(2026, 9, x.d).getDay()], weight: x.d === today ? '700' : '500', bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#DEE1F2' : 'transparent') }));
+const cells = dayInfo.map((x) => ({ col: x.d + 1, bg: x.d === today ? '#FFF3D6' : (x.weekend ? '#F7F8FC' : 'transparent') }));
+const barStyle = {
+confirmed: { bg: '#0A6B3F', fg: '#FFFFFF', border: '1.5px solid #0A6B3F' },
+awaiting: { bg: '#FFF4DE', fg: '#7A4300', border: '1.5px dashed #C98A00' },
+submitted: { bg: '#FFF4DE', fg: '#7A4300', border: '1.5px dashed #C98A00' },
+new: { bg: '#DCE1F7', fg: '#1F2A8A', border: '1.5px dashed #1F2A8A' }
+};
+const gantt = all.filter((r) => r.status !== 'declined').slice().sort((a, b) => a.s - b.s).map((r) => {
+const b = barStyle[eff(r)];
+return { id: r.id, space: r.space, society: r.society.split(' · ')[0], cells: cells, col: (r.s + 1) + ' / ' + (r.e + 2), bg: b.bg, fg: b.fg, border: b.border, text: (r.e - r.s + 1) >= 3 ? meta[eff(r)].text : '', title: r.space + ', ' + r.dates + ', ' + meta[eff(r)].text };
+});
+const canPay = utr.trim() !== '';
 return {
-tabs: tabDefs.map((t) => ({
+hasAttention: needPay.length > 0,
+attentionCount: needPay.length,
+isList: view === 'list',
+isCalendar: view === 'calendar',
+listBg: view === 'list' ? '#141B4D' : 'transparent',
+listFg: view === 'list' ? '#FFFFFF' : '#333A6B',
+calBg: view === 'calendar' ? '#141B4D' : 'transparent',
+calFg: view === 'calendar' ? '#FFFFFF' : '#333A6B',
+showList: () => this.setState({ view: 'list' }),
+showCalendar: () => this.setState({ view: 'calendar' }),
+showBanner: needPay.length > 0 && !(view === 'list' && tab === 'awaiting'),
+bannerTitle: needPay.length === 1 ? '1 request needs your payment' : needPay.length + ' requests need your payment',
+bannerLine: needPay.length ? needPay[0].space + ' · ' + needPay[0].society.split(' · ')[0] + ' · ' + inr(needPay[0].total) + '. Your request was accepted.' : '',
+goPay: () => this.setState({ view: 'list', tab: 'awaiting', sel: needPay.length ? needPay[0].id : sel }),
+tabs: tabDefs.map((t) => {
+const on = t.key === tab;
+const attn = t.key === 'awaiting' && needPay.length > 0;
+return {
 label: t.label,
-bg: t.key === tab ? '#141B4D' : '#FFFFFF',
-fg: t.key === tab ? '#FFFFFF' : '#333A6B',
-border: t.key === tab ? '#141B4D' : '#CBD0E8',
+attention: attn,
+bg: on ? '#141B4D' : (attn ? '#FFE9C7' : '#FFFFFF'),
+fg: on ? '#FFFFFF' : (attn ? '#7A4300' : '#333A6B'),
+border: on ? '#141B4D' : (attn ? '#C98A00' : '#CBD0E8'),
 pick: () => this.setState({ tab: t.key })
-})),
-list: rows.map((r) => ({
+};
+}),
+list: rows.map((r) => {
+const e = eff(r);
+const attn = e === 'awaiting';
+return {
 space: r.space, society: r.society, dates: r.dates, total: inr(r.total),
-pillBg: meta[r.status].pillBg, pillFg: meta[r.status].pillFg, pillText: meta[r.status].text,
-border: r.id === cur.id ? '#141B4D' : '#DDE0F0',
-pick: () => this.setState({ sel: r.id })
-})),
+pillBg: meta[e].pillBg, pillFg: meta[e].pillFg, pillText: meta[e].text,
+onHold: r.status === 'new' && !!r.hold,
+bg: attn ? '#FFFBF1' : '#FFFFFF',
+border: r.id === cur.id ? '#141B4D' : (attn ? '#F0B54A' : '#DDE0F0'),
+pick: () => this.setState({ sel: r.id, utr: '' })
+};
+}),
 listEmpty: rows.length === 0,
 sel: {
 id: cur.id, space: cur.space, society: cur.society, dates: cur.dates, days: String(cur.days), rate: cur.rate,
-purpose: cur.purpose, total: inr(cur.total),
+purpose: cur.purpose, total: inr(cur.total), payee: cur.payee + ' residents', upi: cur.upi, ref: 'SK-' + cur.id,
 pillBg: m.pillBg, pillFg: m.pillFg, pillText: m.text,
 noteBg: m.noteBg, noteFg: m.noteFg, noteTitle: m.title, noteBody: m.body,
+showPay: st === 'awaiting',
+showSubmitted: st === 'submitted',
+submittedUtr: submitted[cur.id] ? 'UTR ' + submitted[cur.id] : '',
 steps: steps
-}
+},
+utr: utr,
+onUtr: (e) => this.setState({ utr: e.target.value }),
+paidBg: canPay ? '#F0B54A' : '#E8EAF6',
+paidFg: canPay ? '#141B4D' : '#8088B8',
+markPaid: () => { if (canPay) this.setState({ submitted: { ...submitted, [cur.id]: utr.trim() }, utr: '' }); },
+days: days,
+gantt: gantt
 };
 }
 }
